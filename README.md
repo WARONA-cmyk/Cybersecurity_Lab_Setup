@@ -48,7 +48,7 @@ A lab like this lets me practise skills that would otherwise be illegal or dange
 
 | Piece | Role |
 |---|---|
-| Windows 10 | Physical machine everything runs on |
+| Windows 11 | Physical machine everything runs on |
 | VirtualBox | Runs the virtual machines |
 | NatNetwork | Private `10.0.0.0/24` network joining all VMs |
 | Kali Linux | My attacker box |
