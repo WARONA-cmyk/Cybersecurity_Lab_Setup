@@ -267,7 +267,9 @@ This environment exists for learning. Nothing here gets pointed at systems I don
 
 **Warona Baji**  
 Cybersecurity Student
+
 LinkedIn: www.linkedin.com/in/warona-baji-300231320
+
 ---
 
 ## 📌 Project Details
