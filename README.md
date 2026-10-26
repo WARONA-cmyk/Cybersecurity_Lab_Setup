@@ -61,8 +61,8 @@ Target machines, including Windows Server, older Windows versions, and Android, 
 
 | Item | Value |
 |---|---|
-| Host OS | Windows 10 |
-| Hypervisor | VirtualBox 7.x |
+| Host OS | Windows 11 |
+| Hypervisor | VirtualBox 7.2 |
 | Guest OS | Kali Linux 2026.2 |
 | Network type | NAT Network |
 | Network name | `NatNetwork` |
