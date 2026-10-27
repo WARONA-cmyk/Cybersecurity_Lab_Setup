@@ -118,10 +118,10 @@ I grabbed the pre-built VirtualBox image straight from Kali's site and imported 
 
 **Adapter 1:**
 
-- Attached to: NAT Network
-- Network: NatNetwork
-- Adapter Type: Intel PRO/1000 MT Desktop
-- Cable Connected: Ticked
+- **Attached to:** NAT Network
+- **Network:** NatNetwork
+- **Adapter Type:** Intel PRO/1000 MT Desktop
+- **Cable Connected:** Ticked
 
 ![Kali VM Network Settings](02-kali-network-settings.png)
 
@@ -179,7 +179,7 @@ Both came back with four replies and no packet loss.
 
 ### Step 8 — Confirming the Shared Folder
 
-Auto-mount made the shared folder available in Kali under the `sf_downloads` mount point, confirming that the shared-folder integration was working.
+Auto-mount made the shared folder available in Kali under the `sf_downloads` mount point.
 
 The expected mount path is:
 
@@ -188,6 +188,39 @@ The expected mount path is:
 ```
 
 ![Shared Folder Mounted](07-shared-folder-mounted.png)
+
+---
+
+## 🐞 Problem I Hit & How I Fixed It
+
+### Shared Folder Returned "Permission Denied"
+
+Even with Auto-mount ticked in VirtualBox, opening `/media/sf_downloads` inside Kali returned a permission error.
+
+The mount existed, but my user account did not have the necessary permissions to access it.
+
+**Fix:**
+
+I added my current user to the `vboxsf` group, which is used for VirtualBox shared-folder access.
+
+```bash
+sudo usermod -aG vboxsf "$USER"
+```
+
+After running the command, I logged out of Kali Linux and logged back in so the updated group membership could take effect. Restarting the virtual machine also works.
+
+**Verification:**
+
+```bash
+groups
+ls -la /media/sf_downloads/
+```
+
+The `groups` command should include `vboxsf`, and the directory listing should work if the shared folder is mounted and configured correctly.
+
+**What I learned:**
+
+Enabling a shared folder in VirtualBox does not automatically grant every Linux user permission to access it. The mount configuration and user group permissions both matter.
 
 ---
 
@@ -205,10 +238,12 @@ Anything I break later can be rolled back to this state instead of costing me a 
 
 | Check | Command | What Should Happen |
 |---|---|---|
-| Confirm address | `ip addr show` | Shows `10.0.0.2/24` on `eth0` |
+| Confirm address | `ip addr show` | Shows `10.0.0.2/24` on the active interface |
 | Reach gateway | `ping 10.0.0.1` | Replies received |
 | Reach internet | `ping 8.8.8.8` | Replies received |
 | Resolve names | `ping networkwalks.com` | Name resolves and replies are received |
+| Check shared folder | `ls -la /media/sf_downloads/` | Folder contents are accessible |
+| Check group membership | `groups` | Includes `vboxsf` |
 | Rollback works | Restore snapshot, then run `ip a` | Clean baseline returns |
 
 ### Results
@@ -242,6 +277,10 @@ Setting an address by hand meant learning what the gateway, subnet prefix, and D
 
 A snapshot isn't a backup of files. It's a way to restore a virtual machine to an earlier state. Taking one before experimenting makes risky changes easier to recover from.
 
+### Shared Folder Permissions
+
+The shared-folder problem taught me that mounting a folder and having permission to access it are two different things. Understanding Linux groups helped me troubleshoot the issue instead of changing permissions blindly.
+
 ### Writing It Down
 
 Half of what I understood only made sense once I tried to explain it in this document.
@@ -268,7 +307,7 @@ This environment exists for learning. Nothing here gets pointed at systems I don
 **Warona Baji**  
 Cybersecurity Student
 
-LinkedIn: www.linkedin.com/in/warona-baji-300231320
+**LinkedIn:** https://www.linkedin.com/in/warona-baji-300231320
 
 ---
 
